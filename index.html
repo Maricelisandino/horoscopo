@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Horóscopo del Día</title>
+<style>
+    body {
+        margin: 0;
+        font-family: 'Segoe UI', sans-serif;
+        background: #0b0b33;
+        overflow: hidden;
+        color: white;
+    }
+
+    /* Fondo de estrellas */
+    #stars, #stars2, #stars3 {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: block;
+        background: transparent;
+    }
+
+    #stars {
+        background: url('https://raw.githubusercontent.com/niazwazir/Starfield/master/stars.png') repeat;
+        animation: moveStars 200s linear infinite;
+    }
+    #stars2 {
+        background: url('https://raw.githubusercontent.com/niazwazir/Starfield/master/stars2.png') repeat;
+        animation: moveStars 400s linear infinite;
+    }
+    #stars3 {
+        background: url('https://raw.githubusercontent.com/niazwazir/Starfield/master/stars3.png') repeat;
+        animation: moveStars 600s linear infinite;
+    }
+
+    @keyframes moveStars {
+        from {background-position: 0 0;} to {background-position: -10000px 5000px;}
+    }
+
+    /* Contenedor estilo app */
+    .container {
+        position: relative;
+        z-index: 5;
+        max-width: 430px;
+        margin: 50px auto;
+        background: rgba(255, 255, 255, 0.1);
+        padding: 25px;
+        border-radius: 20px;
+        backdrop-filter: blur(10px);
+        box-shadow: 0 0 20px rgba(255,255,255,0.3);
+        text-align: center;
+    }
+
+    h1 {
+        font-size: 28px;
+        margin-bottom: 10px;
+        text-shadow: 0 0 10px #fff;
+    }
+
+    select, button {
+        width: 90%;
+        padding: 14px;
+        margin-top: 15px;
+        border-radius: 12px;
+        border: none;
+        font-size: 18px;
+    }
+
+    select {
+        background: #ffffffcc;
+    }
+
+    button {
+        background: #673ab7;
+        color: white;
+        cursor: pointer;
+        transition: 0.3s;
+        font-weight: bold;
+    }
+
+    button:hover {
+        transform: scale(1.05);
+        box-shadow: 0 0 10px #fff;
+    }
+
+    #mensaje, #compatibilidad {
+        margin-top: 20px;
+        font-size: 20px;
+        animation: aparecer 0.6s ease-in-out;
+    }
+
+    @keyframes aparecer {
+        from {opacity: 0;} to {opacity: 1;}
+    }
+</style>
+</head>
+<body>
+<div id="stars"></div><div id="stars2"></div><div id="stars3"></div>
+
+<div class="container">
+    <h1>🔮 Horóscopo del Día</h1>
+
+    <select id="signo" onchange="cambiarColor()">
+        <option value="">Selecciona tu signo</option>
+        <option value="aries">♈ Aries</option>
+        <option value="tauro">♉ Tauro</option>
+        <option value="geminis">♊ Géminis</option>
+        <option value="cancer">♋ Cáncer</option>
+        <option value="leo">♌ Leo</option>
+        <option value="virgo">♍ Virgo</option>
+        <option value="libra">♎ Libra</option>
+        <option value="escorpio">♏ Escorpio</option>
+        <option value="sagitario">♐ Sagitario</option>
+        <option value="capricornio">♑ Capricornio</option>
+        <option value="acuario">♒ Acuario</option>
+        <option value="piscis">♓ Piscis</option>
+    </select>
+
+    <button id="btn" onclick="mostrarHoroscopo()">Ver horóscopo</button>
+
+    <p id="mensaje"></p>
+    <p id="compatibilidad"></p>
+</div>
+
+<script>
+const colores = {
+    aries: "#ff6f61",
+    tauro: "#8bc34a",
+    geminis: "#ffd54f",
+    cancer: "#90caf9",
+    leo: "#ffb300",
+    virgo: "#a5d6a7",
+    libra: "#ce93d8",
+    escorpio: "#f06292",
+    sagitario: "#4fc3f7",
+    capricornio: "#bcaaa4",
+    acuario: "#81d4fa",
+    piscis: "#80cbc4"
+};
+
+const compatibilidad = {
+    aries: "Mejor compatibilidad: Leo, Sagitario y Géminis.",
+    tauro: "Mejor compatibilidad: Virgo, Capricornio y Cáncer.",
+    geminis: "Mejor compatibilidad: Libra, Acuario y Aries.",
+    cancer: "Mejor compatibilidad: Escorpio, Piscis y Tauro.",
+    leo: "Mejor compatibilidad: Aries, Sagitario y Libra.",
+    virgo: "Mejor compatibilidad: Tauro, Capricornio y Cáncer.",
+    libra: "Mejor compatibilidad: Géminis, Acuario y Leo.",
+    escorpio: "Mejor compatibilidad: Cáncer, Piscis y Virgo.",
+    sagitario: "Mejor compatibilidad: Aries, Leo y Acuario.",
+    capricornio: "Mejor compatibilidad: Tauro, Virgo y Piscis.",
+    acuario: "Mejor compatibilidad: Géminis, Libra y Sagitario.",
+    piscis: "Mejor compatibilidad: Cáncer, Escorpio y Capricornio."
+};
+
+const horoscopos = {
+    aries: ["Hoy tu determinación abre caminos importantes.", "Una oportunidad inesperada iluminará tu día.", "Tu energía atraerá buenas noticias."],
+    tauro: ["La calma será tu aliada hoy.", "Un avance financiero te dará tranquilidad.", "Tu paciencia se verá recompensada."],
+    geminis: ["La comunicación te traerá una sorpresa.", "Hoy brillas intelectualmente.", "Algo nuevo despierta tu curiosidad."],
+    cancer: ["Escucha tu intuición, te dará respuestas.", "Una conexión emocional se fortalece.", "Tu sensibilidad será tu guía."],
+    leo: ["Hoy atraes todas las miradas.", "Un logro personal te hará sonreír.", "Tu carisma abre puertas importantes."],
+    virgo: ["Tu orden mental trae claridad.", "Hoy resolverás algo pendiente.", "Un detalle pequeño traerá una gran solución."],
+    libra: ["La armonía vuelve a tu entorno.", "Tu encanto social hará magia.", "Una decisión justa traerá paz."],
+    escorpio: ["Un misterio se aclara a tu favor.", "Tu intensidad te impulsa hacia el éxito.", "La verdad te dará tranquilidad."],
+    sagitario: ["La aventura llama a tu puerta.", "Un cambio te llenará de energía.", "Hoy fluirás sin esfuerzo."],
+    capricornio: ["Tu constancia empieza a dar frutos.", "Un objetivo se acerca más de lo que crees.", "Hoy sentirás enfoque absoluto."],
+    acuario: ["Una idea revolucionaria destaca hoy.", "Gente nueva llega a tu vida.", "Tu visión única te llevará lejos."],
+    piscis: ["Tu intuición será tu superpoder.", "Una inspiración fuerte te moverá.", "Un gesto amable cambia tu día."]
+};
+
+function cambiarColor() {
+    const signo = document.getElementById("signo").value;
+    if (signo) document.getElementById("btn").style.background = colores[signo];
+}
+
+function mostrarHoroscopo() {
+    const signo = document.getElementById("signo").value;
+    if (!signo) return;
+    const mensaje = horoscopos[signo][Math.floor(Math.random()*3)];
+    document.getElementById("mensaje").textContent = mensaje;
+    document.getElementById("compatibilidad").textContent = compatibilidad[signo];
+}
+</script>
+
+</body>
+</html>
