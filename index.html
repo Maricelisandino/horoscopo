@@ -172,6 +172,28 @@ const horoscopos = {
     piscis: ["Tu intuición será tu superpoder.", "Una inspiración fuerte te moverá.", "Un gesto amable cambia tu día."]
 };
 
+// Copia de trabajo para evitar repeticiones
+let horoscoposRestantes = JSON.parse(JSON.stringify(horoscopos));
+
+function mostrarHoroscopo() {
+    const signo = document.getElementById("signo").value;
+    if (!signo) return;
+
+    // Si ya no quedan mensajes, recargar
+    if (horoscoposRestantes[signo].length === 0) {
+        horoscoposRestantes[signo] = [...horoscopos[signo]];
+    }
+
+    const index = Math.floor(Math.random() * horoscoposRestantes[signo].length);
+    const mensaje = horoscoposRestantes[signo][index];
+
+    // eliminar mensaje usado
+    horoscoposRestantes[signo].splice(index, 1);
+
+    document.getElementById("mensaje").textContent = mensaje;
+    document.getElementById("compatibilidad").textContent = compatibilidad[signo];
+}
+
 function cambiarColor() {
     const signo = document.getElementById("signo").value;
     if (signo) document.getElementById("btn").style.background = colores[signo];
